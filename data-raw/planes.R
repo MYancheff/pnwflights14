@@ -1,8 +1,9 @@
 library(dplyr)
 
-# To find current database go to http://registry.faa.gov/database/
+# To find current database go to 
+# http://www.faa.gov/licenses_certificates?aircraft_certification/aircraft_registry/releasable_aircraft_download/
 
-src <- "http://registry.faa.gov/database/AR092015.zip"
+src <- "http://registry.faa.gov/database/ReleasableAircraft.zip"
 lcl <- "data-raw/planes"
 
 # Extracts information from zip file (Files deleted before uploading to GitHub)
@@ -19,15 +20,15 @@ names(master) <- tolower(names(master))
 
 keep <- master %>%
   tbl_df() %>%
-  select(nnum = n.number, code = mfr.mdl.code, year = year.mfr)
+  select(nnum = 1, code = mfr.mdl.code, year = year.mfr)
 
-ref <- read.csv("data-raw/planes//ACFTREF.txt", stringsAsFactors = FALSE,
+ref <- read.csv("data-raw/planes/ACFTREF.txt", stringsAsFactors = FALSE,
   strip.white = TRUE)
 names(ref) <- tolower(names(ref))
 
 ref <- ref %>%
   tbl_df() %>%
-  select(code, mfr, model, type.acft, type.eng, no.eng, no.seats, speed)
+  select(code = 1, mfr, model, type.acft, type.eng, no.eng, no.seats, speed)
 
 # Combine together
 
