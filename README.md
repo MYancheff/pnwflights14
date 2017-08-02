@@ -1,4 +1,4 @@
-# pnwflights14
+# pnwflights16-17
 
 This package is a modified version of Hadley Wickham's `nycflights13` package and 
 contains information about all flights that departed from the two major airports of

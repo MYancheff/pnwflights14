@@ -11,8 +11,8 @@ get_asos <- function(station) {
   url <- "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?"
   query <- list(
     station = station, data = "all",
-    year1 = "2016", month1 = "1", day1 = "1",
-    year2 = "2016", month2 = "12", day2 = "31", tz = "UTC",
+    year1 = "2016", month1 = "8", day1 = "1",
+    year2 = "2017", month2 = "7", day2 = "31", tz = "UTC",
     format = "comma", latlon = "no", direct = "yes")
 
   dir.create("data-raw/weather", showWarnings = FALSE, recursive = TRUE)
@@ -50,7 +50,7 @@ weather <- raw %>%
     wind_speed = as.numeric(wind_speed) * 1.15078, # convert to mpg
     wind_gust = as.numeric(wind_speed) * 1.15078
   ) %>%
-  mutate(year = 2016, month = month(time), day = mday(time), hour = hour(time)) %>%
+  mutate(year = year(time), month = month(time), day = mday(time), hour = hour(time)) %>%
   group_by(station, month, day, hour) %>%
   filter(row_number() == 1) %>%
   select(origin = station, year:hour, temp:visib) %>%
