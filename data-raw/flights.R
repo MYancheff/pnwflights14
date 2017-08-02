@@ -1,11 +1,11 @@
 library(dplyr)
 
-flight_url <- function(year = 2016, month) {
+flight_url <- function(year, month) {
   base_url <- "http://www.transtats.bts.gov//PREZIP/"
   sprintf(paste0(base_url, "On_Time_On_Time_Performance_%d_%d.zip"), year, month)
 }
 
-download_month <- function(year = 2016, month) {
+download_month <- function(year, month) {
   url <- flight_url(year, month)
 
   temp <- tempfile(fileext = ".zip")
@@ -18,15 +18,19 @@ download_month <- function(year = 2016, month) {
   unzip(temp, exdir = "data-raw/flights", junkpaths = TRUE, files = csv)
 
   src <- paste0("data-raw/flights/", csv)
-  dst <- paste0("data-raw/flights/", "2016-", month, ".csv")
+  dst <- paste0("data-raw/flights/", year, "-", month, ".csv")
   file.rename(src, dst)
 }
 
-months <- 1:12
-needed <- paste0("2016-", months, ".csv")
-missing <- months[!(needed %in% dir("data-raw/flights"))]
+months16 <- 6:12
+months17 <- 1:5
+needed16 <- paste0("2016-", months16, ".csv")
+needed17 <- paste0("2017-", months17, ".csv")
+missing16 <- months16[!(needed16 %in% dir("data-raw/flights"))]
+missing17 <- months17[!(needed17 %in% dir("data-raw/flights"))]
 
-lapply(missing, download_month, year = 2016)
+lapply(missing16, download_month, year = 2016)
+lapply(missing17, download_month, year = 2017)
 
 get_pnw <- function(path) {
   read.csv(path, stringsAsFactors = FALSE) %>%
